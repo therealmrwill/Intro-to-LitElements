@@ -17,7 +17,6 @@ export class TestBtn extends LitElement {
       margin: auto;
       width: 50%;
       font-size: 30px;
-      
     }
   `;
     
