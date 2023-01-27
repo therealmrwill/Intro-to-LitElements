@@ -5,80 +5,101 @@ export class TestBtn extends LitElement {
     :host {
       display: block;
       padding: 25px;
-
     }
-    :host > div {
+    :host([current-side]) {
+      border: 10px dashed green;
+    }
+    div {
       padding: 50px;
       border-radius: 25px;
-      display : flex
+      display : flex;
     }
-    :host > p {
+    p {
       text-align: center;
       margin: auto;
       width: 50%;
-      font-size: 30px;
+      font-size: 20px;
+      word-wrap: break-word;
+      word-break: keep-all;
+      overflow: hidden;
+    }
+    .container {
+      height: var(--test-btn-height, 300px);
+      width: var(--test-btn-width, 150px);
     }
   `;
     
     
   static properties = {
-    currentSide: {type: Boolean},
-    sideOneData: {type: String},
-    sideTwoData: {type: String}, 
-    height: {type: Number},
-    width: {type: Number},
-    color1: {type: String},
+    currentSide: {type: Boolean,
+    reflect: true,
+  attribute: 'current-side'},
+    sideOneData: {
+      type: String,
+      attribute: "side-one-data",
+    },
+    sideTwoData: {
+      type: String,
+      attribute: "side-two-data",
+      reflect: true,
+    }, 
+    color1: {
+      type: String,
+    },
     color2: {type: String},
-    coloredText: {type: String}
+    backgroundColor: {
+      type: String
+    }
   };
 
-  constructor(sideOneData, sideTwoData, height, width, color1, color2, coloredText) {
+  constructor() {
     super();
     this.currentSide = true;
-    this.sideOneData = sideOneData || "No Data Entered (Side 1)";
-    this.sideTwoData = sideTwoData || "No Data Entered (Side 2)";
-    this.height = height || 300;
-    this.width = width || 150;
-    this.color1 = color1 || "#AAAE7F";
-    this.color2 = color2 || "#143109"; 
-    this.coloredText = coloredText || "True";
+    this.sideOneData = null;
+    this.sideTwoData = null;
+    this.color1 = "white";
+    this.color2 = "black";
+    this.activeColor = null;
+    this.backgroundColor = null;
+  }
+
+  firstUpdated(changedProperties) {
+    this.shadowRoot.querySelector(".container").addEventListener('click', this.__flip.bind(this));
+  }
+
+  updated(changedProperties) {
+    if (super.updated) {
+      super.updated(changedProperties);
+    }
+    changedProperties.forEach((oldValue, propName) => {
+      if (propName === "currentSide") {
+        this.activeColor = (this.currentSide) ? this.color2 : this.color1;
+        this.backgroundColor = (!this.currentSide) ? this.color2 : this.color1;
+      }      
+    });
   }
 
   __flip() {
      this.currentSide = !this.currentSide;
+     this.dispatchEvent(new CustomEvent('test-btn-flipped', {
+      composed: true,
+      bubbles: true,
+      cancelable: false,
+      detail: {
+        value: this.currentSide
+      }
+     }));
   }
 
   render() {
-    var tempString = (this.currentSide) ? this.sideOneData : this.sideTwoData;
-    var backgroundColor = (this.currentSide) ? this.color1 : this.color2;
-
-    console.log(this.coloredText);
-
-    var textColor = (this.coloredText == "True") ? ((this.currentSide) ? this.color2 : this.color1) : "white"; 
-
-    console.log(textColor);
-
     return html`
-      <div 
-        @click=${this.__flip}
-        style="
-        height: ${this.height}px;
-        width: ${this.width}px;
-        background-color: ${backgroundColor};
-        color: ${textColor};
-        
-        "> 
+      <div
+        class="container"
+        style="background-color: ${this.backgroundColor};
+        color: ${this.activeColor};"> 
 
-      <p
-        style=" 
-        text-align: center;
-        margin: auto;
-        width: 50%;
-        font-size: 25px;
-        word-wrap: break-word;
-        word-break: keep-all;
-      ">${tempString}</p>
-
+      <p part="text-side">${this.currentSide ? this.sideOneData : this.sideTwoData}</p>
+      <p>${this.currentSide ? html`<slot name="side1"></slot>` : html`<slot name="side2"></slot>`}</p>
       </div>
     `;
   }
