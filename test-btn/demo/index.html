@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      background: #fafafa;
+    }
+  </style>
+</head>
+<body>
+  <div id="demo"></div>
+
+  <script type="module">
+    import { html, render } from 'lit';
+    import '../test-btn.js';
+
+    render(
+      html`
+        <div style="display: flex;">
+          
+          <div style="display: block;">
+            <test-btn 
+              sideOneData="Hello my name is Will"
+              sideTwoData="And this is my attempt at making a card"
+              ></test-btn>
+
+            <test-btn 
+              height=150
+              width=150
+              sideOneData="This one is square"
+              sideTwoData="Which I think is pretty neat"
+            ></test-btn>
+          </div>
+
+          <div style="display: block;">
+            <test-btn
+              height=200
+              width=200
+              sideOneData="One fish"
+              sideTwoData="Two Fish"
+              ></test-btn>
+
+            <test-btn 
+              height=250
+              width=200
+              sideOneData="Red Fish"
+              sideTwoData="Blue Fish"
+              color1="#DB4437"
+              color2="#4285F4"
+              coloredText="False"
+            ></test-btn>
+          </div> 
+
+          <div style="display: block;">
+            <test-btn
+              height=100
+              width=150
+              sideOneData="This one is using..."
+              sideTwoData="Some cool colors"
+              color1="#2f2f2f"
+              color2="#fe6f27"
+              coloredText="False"
+              ></test-btn>
+
+            <test-btn 
+              height=100
+              width=150
+              sideOneData="This one is using..."
+              sideTwoData="Linked-In Colors"
+              color1="#0d63bd"
+              color2="#666666"
+              coloredText="False"
+            ></test-btn>
+
+            <test-btn 
+              height=100
+              width=150
+              sideOneData=" "
+              sideTwoData="Pretty cool Huh?"
+              coloredText="False"
+            ></test-btn>
+          </div> 
+
+        </div>
+      `,
+      document.querySelector('#demo')
+    );
+  </script>
+</body>
+</html>
