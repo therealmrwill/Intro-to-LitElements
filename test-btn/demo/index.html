@@ -6,6 +6,14 @@
     body {
       background: #fafafa;
     }
+    test-btn[current-side] {
+      background-color: orange !important;
+    }
+    test-btn::part(text-side) {
+      margin: 10px;
+      padding: 50px;
+      border: 10px solid blue;
+    }
   </style>
 </head>
 <body>
@@ -14,73 +22,18 @@
   <script type="module">
     import { html, render } from 'lit';
     import '../test-btn.js';
-
+    const values = [{value:"Value 1", value2: "ANother thing"},{value:"Value 1", value2: "ANother thing"},{value:"Value 1", value2: "ANother thing"},{value:"Value 1", value2: "ANother thing"}];
     render(
       html`
         <div style="display: flex;">
+        ${values.map(item => html`
           
-          <div style="display: block;">
-            <test-btn 
-              sideOneData="Hello my name is Will"
-              sideTwoData="And this is my attempt at making a card"
-              ></test-btn>
+          <test-btn 
+          side-one-data="${item.value}"
+          side-two-data="${item.value2}"
+  ></test-btn>
 
-            <test-btn 
-              height=150
-              width=150
-              sideOneData="This one is square"
-              sideTwoData="Which I think is pretty neat"
-            ></test-btn>
-          </div>
-
-          <div style="display: block;">
-            <test-btn
-              height=200
-              width=200
-              sideOneData="One fish"
-              sideTwoData="Two Fish"
-              ></test-btn>
-
-            <test-btn 
-              height=250
-              width=200
-              sideOneData="Red Fish"
-              sideTwoData="Blue Fish"
-              color1="#DB4437"
-              color2="#4285F4"
-              coloredText="False"
-            ></test-btn>
-          </div> 
-
-          <div style="display: block;">
-            <test-btn
-              height=100
-              width=150
-              sideOneData="This one is using..."
-              sideTwoData="Some cool colors"
-              color1="#2f2f2f"
-              color2="#fe6f27"
-              coloredText="False"
-              ></test-btn>
-
-            <test-btn 
-              height=100
-              width=150
-              sideOneData="This one is using..."
-              sideTwoData="Linked-In Colors"
-              color1="#0d63bd"
-              color2="#666666"
-              coloredText="False"
-            ></test-btn>
-
-            <test-btn 
-              height=100
-              width=150
-              sideOneData="Pretty cool huh?"
-              sideTwoData="The End"
-              coloredText="False"
-            ></test-btn>
-          </div> 
+          `)}
 
         </div>
       `,
